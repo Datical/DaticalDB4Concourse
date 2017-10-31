@@ -1,0 +1,105 @@
+---
+resources:
+- name: resource-ddb
+  type: git
+  source:
+    branch: master
+    uri: {{gist-url}}
+    username: {{git-username}}
+    password: {{git-password}}
+
+- name: resource-sql
+  type: git
+  source:
+    branch: pipeline1
+    uri: {{sql-url}}
+    username: {{git-username}}
+    password: {{git-password}}
+    
+
+jobs:
+- name: package
+  plan:
+  - get: resource-ddb
+  - get: resource-sql
+  - task: commit
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: dockerusername/dockerrepos
+          tag: dockertag
+
+      inputs:
+      - name: resource-ddb
+      - name: resource-sql
+
+      outputs:
+      - name: ddb
+
+      run:
+        path: /bin/bash
+        args:
+        - -c
+        - |
+          set -eux
+          
+          export PATH=$PATH:/u01/app/oracle/product/11.2.0/xe/bin/
+          export ORACLE_HOME=/u01/app/oracle/product/11.2.0/xe
+
+          git clone resource-ddb ddb
+          git clone resource-sql sql
+          
+          git config --global user.name "YOUR NAME"
+          git config --global user.email "YOUR EMAIL ADDRESS"
+    
+          cd sql
+          git show-branch
+          git branch --set-upstream-to=origin/pipeline1 pipeline1
+          cd ../ddb
+          git branch --set-upstream-to=origin/master master
+
+          /app/datical/repl/hammer groovy deployPackager.groovy pipeline1 scm=true
+          curl -k --request POST "https://<daticaldmchostname>/service/reporting/qa/v1/audit-db/sync" 
+
+  - put: resource-ddb  
+    params: {repository: ddb}
+ 
+ 
+- name: deploy-dev
+  plan:
+  - aggregate:
+          - get: resource-ddb
+            passed: [package]
+
+  - task: commit
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: dockerusername/dockerrepos
+          tag: dockertag
+
+      inputs:
+      - name: resource-ddb
+
+      run:
+        path: /bin/bash
+        args:
+        - -c
+        - |
+          set -eux
+         
+          git clone resource-ddb ddb
+          
+          git config --global user.name "YOUR NAME"
+          git config --global user.email "YOUR EMAIL ADDRESS"
+          
+          cd ddb
+          
+          git branch --set-upstream-to=origin/master master
+          
+          /app/datical/repl/hammer deploy  DEV  --labels=\$all
+          curl -k --request POST "https://<daticaldmchostname>/service/reporting/qa/v1/audit-db/sync" 
