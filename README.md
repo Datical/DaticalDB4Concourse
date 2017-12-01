@@ -8,6 +8,6 @@ To integrate Datical DB in your existing Concourse installation:
 2. Issue the following command: `fly -t main set-pipeline -p datical -c datical_package.yml -l credentials.yml`
 3. In the Concourse Web UI, unpause the new `datical` pipeline and select the `+` button to request a new release.
 
-For support, questions, comments, and compliments, please contact as at support@datical.com and on Twitter (@Datical)[https://twitter.com/Datical].
+For support, questions, comments, and compliments, please contact as at support@datical.com and on Twitter [@Datical](https://twitter.com/Datical).
 
 
