@@ -1,2 +1,2 @@
-# DaticalDB4PivotalConcourse
-Datical DB integration for Pivotal Concourse
+# DaticalDB4Concourse
+Datical DB integration for Concourse
