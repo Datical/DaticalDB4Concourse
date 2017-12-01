@@ -1,6 +1,8 @@
 # DaticalDB4Concourse
 Datical DB integration for Concourse
 
+You can see a short demonstration video of Concourse and Datical DB [here](https://www.datical.com/videos/pivotal-cloud-foundry-and-datical-database-release-automation/).
+
 To integrate Datical DB in your existing Concourse installation:
 
 1. Download datical_package.yml and credentials.yml to the machine where Fly is installed.
