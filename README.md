@@ -5,8 +5,8 @@ To integrate Datical DB in your existing Concourse installation:
 
 1. Download datical_package.yml and credentials.yml to the machine where Fly is installed.
 2. Edit the datical_package.yml and credentials.yml to reflect your environment.
-  1. . Note that you will need to update credentials.yml to reflect your credentials and the IP address of your Git location.
-  2. Also, you will need to update datical_package.yml to reflect the IP address of your Datical Monitoring Console server. Look for the "curl" call to find it.
+  a. Update credentials.yml to reflect your credentials and the IP address of your Git location.
+  b. Update datical_package.yml to reflect the IP address of your Datical Monitoring Console server. Look for the "curl" call to find it.
 2. Issue the following command: fly -t main set-pipeline -p datical -c datical_package.yml -l credentials.yml
 3. In the Concourse Web UI, unpause the new "datical" pipeline and select the "+" button to request a new release.
 
