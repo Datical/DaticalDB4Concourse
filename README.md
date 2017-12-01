@@ -9,5 +9,3 @@ To integrate Datical DB in your existing Concourse installation:
 3. In the Concourse Web UI, unpause the new `datical` pipeline and select the `+` button to request a new release.
 
 For support, questions, comments, and compliments, please contact as at support@datical.com and on Twitter [@Datical](https://twitter.com/Datical).
-
-
